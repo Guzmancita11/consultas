@@ -1,0 +1,246 @@
+<! Doctype html-->
+<html>
+        <head>
+            <meta charset="utf-8">
+                <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
+            <script src="js/jquery.min.js"></script>
+            <script src="js/jquery.mobile-1.4.5.min.js"></script>
+            <script type="text/javascript" charset="utf-8 src"phonegap.js"></script>
+            
+            
+            <style type="text/css">
+                 p{
+                    text-align: justify;
+                }
+            </style>
+             <title> Control escolar </title>
+                 <script type="text/javascript">
+                    $(document).ready(function inicio(){
+                     var btnEnvio=$("#enviar");
+                     btnEnvio.click(function enviarDatos(){
+                     var nom=$("#nombre").val();
+                     var ap=$("#apellido").val();
+                     var car=$("#carrera").val();
+                     var gra=$("#grado").val();
+                     var inst=$("#institucion").val();
+                     var mat=$("#materias").val();
+                              alert("tel"); 
+                        $.ajax({
+                            type:"POST",
+                           /*  url:"enviar.php",*/
+                           url:"http://loguz1.260mb.net/enviar.php",
+                            data:"nombre="+nom+"&apellido="+ap+"&carrera="+car+"&grado="+gra+"&institucion="+inst+"&materias="+mat,
+                            success: recepcion
+                            });
+                       });
+                       function recepcion(datos) {
+                        alert("Listo"+ datos);
+                       var resp=$("#respuesta");
+                       resp.html(datos);
+                       }
+                       
+                        var btnProm=$("#registro");
+                       btnProm.click(function enviarPromedio(){
+                        var mate=$("#materia").val();
+                          var pri=$("#primero").val();
+                              var seg=$("#segundo").val();
+                               var ter=$("#tercero").val();
+                                 var cua=$("#cuarto").val();
+                               $.ajax({
+                            type:"POST",
+                            /* url:"enviarC.php",*/
+                           url:"http://loguz1.260mb.net/enviaC.php",
+                            data:"materia="+mate+"&primero="+pri+"&segundo="+seg+"&tercero="+ter+"&cuarto="+cua,
+                            success: calificaciones
+                            });
+                       });
+                       function calificaciones(datos) {
+                       var resp=$("#resp");
+                       resp.html(datos);
+                       }
+                       
+                       var btnConsult=$("#consultar");
+                       btnConsult.click(function cons(){
+                       
+                        $.ajax({
+                            type:"POST",
+                            url:"consultas.php",
+                            data:"",
+                            success: consultas
+                           
+                            });
+                          
+                        });
+                                        
+                       function consultas(datos) {
+                        var respDatos=$.parseJSON(datos);
+                       var resp=$("#respu1");
+                       resp.html("");
+                       resp.append('<table id="tab" border="1">');
+                       var tabla=$("#tab");
+                        tabla.html("<tr><th>Matricula</th><th>Nombre</th><th>Apellido</th><th>Carrera</th><th>Grado</th><th>Institucion</th><th>NumMaterias</th><tr>");
+//tabla.append("</table");
+                        for(var i in respDatos){
+                            tabla.append("<tr><td>"+respDatos[i].Matricula+"</td>"
+                              +"<td>"+respDatos[i].Nombre+"</td>"
+                              +"<td>"+respDatos[i].Apellido+"</td>"
+                              +"<td>"+respDatos[i].Carrera+"</td>"
+                              +"<td>"+respDatos[i].Grado+"</td>"
+                              +"<td>"+respDatos[i].Institucion+"</td>"
+                              +"<td>"+respDatos[i].NumMaterias+"</td></tr>");
+                        }
+                       }                         
+                    alert("Listo");
+        });
+                 </script>
+
+                                    
+              
+        </head>
+        
+ <body BGCOLOR=#12ddff>
+     /* -------------------------------------------------------------------------------------------------------------------------  */
+           <div data-role="page" id="Inicio" data-theme="a">
+                <div data-role="header">
+                    <p>
+                        <h1 style="text-align: center" >CONTROL ESTUDIANTIL </h1> <br>
+                        <h2>Menu </h2>
+                    </p>
+                </div>
+                <div data-role="content">
+                    <a href="#PagA" data-role="button" data-transition="slide">REGISTRO ESTUDIANTIL</a>
+                    <a href="#PagC" data-role="button" data-transition="slideup">REGISTRO DE CALIFICACION</a>
+                    <a href="#PagD" data-role="button" data-transition="slideup">CONSULTAS DATOS</a>
+                </div>
+                <div data-role="footer">
+                    <p style="text-align: center">  Datos Reservados</p>
+                </div>
+           </div>
+      
+      
+      /* -------------------------------------------------------------------------------------------------------------------------  */
+      
+      
+      
+
+    <div data-role="page" id="PagA" data-theme="a">
+     <div data-role="header">
+                <h1 style="text-align: center">REGISTRO ESTUDIANTIL </h1>
+                    <a href="#Inicio" data-role="button" data-transition="slide" data-add-back-btnRegresar
+                    data-add-back-btn="true" data-icon="home">Regresar</a>
+                    <p style="text-align: center"> Ingresar Datos Del Estudiante </p>
+                </div>
+   <div data-role="content">
+         
+         <form method="post" action="enviar.php" style="text-align: center; font-size: 20px">
+                 <div class="ui-field-contain">
+                 <label for="nombre">Nombre:</label>
+                 <input type="text" name="nombre" id="nombre"/></br></br>
+                 <label for="apellido">Apellido:</label>
+                 <input type="text" name="apellido" id="apellido"/></br></br>
+                 <label for="carrera">Carrera:</label>
+                 <input type="text" name="carrera" id="carrera"/></br></br>
+                 <label for="grado">Grado:</label>
+                 <input type="text" name="grado" id="grado"/></br></br>
+                 <label for="institucion">Institucion:</label>
+                 <input type="text" name="institucion" id="institucion"/></br></br>
+                 <label for="materias">Numero de materias en curso:</label>
+                <input type="text" name="materias" id="materias"/></br></br>
+                    </div>
+                 <input type="button" name="enviar" id="enviar" value="Registrar Alumno"  >
+          </form>
+                 <div data-transition="flip" id="respuesta">  
+                   </div>
+        
+                   </div>
+                  <div data-role="footer">
+                 <p style="text-align: center; font-size: 10px;">Deerechos Reservados </p>
+                     </div>
+  </div>
+     /* -------------------------------------------------------------------------------------------------------------------------  */
+  
+    <div data-role="page" id="PagC" data-theme="b">
+           <div data-role="header">
+                    <a href="#Inicio" data-role="button" data-transition="slideup" data-add-back-btnRegresar
+                    data-add-back-btn="true" data-icon="home">Regresar</a>
+                    <p> Ingrasar Calificaciones</p>
+            </div>
+                    <p style="text-align: center"></p>
+                    <h1 style="text-align: center">REGISTRO DE CALIFICACION</h1>
+    <div data-role="content"  style="text-align: center; font-size: 20px">
+             <form method="post" action="enviarC.php">
+                    <div class="ui-field-contain">
+                 <label for="materia">Nombre de la materia:</label>
+                 <input type="text" name="materia" id="materia"/></br></br>
+                 <label for="primero">Primer parcial:</label>
+                 <input type="text" name="primero" id="primero" style="text-align: right"  /></br></br>
+                 <label for="segundo">Segundo parcial:</label>
+                 <input type="text" name="segundo" id="segundo"/></br></br>
+                 <label for="tercero">Tercer parcial:</label>
+                 <input type="text" name="tercero" id="tercero"/></br></br>
+                 <label for="cuarto">Cuarto parcial:</label>
+                 <input type="text" name="cuarto" id="cuarto"/></br></br>
+                 
+               
+                  
+                    </div>
+                  <input type="button" name="registro" id="registro" value="Registrar Calificaciones">
+             </form>
+                 <div data-transition="flip" id="resp">  
+                 </div>
+                  </div>
+            <div data-role="footer">
+                <p style="text-align: center; font-size: 10px;">Deerechos Reservados </p>
+             </div>
+            </div>
+    
+    
+    
+    
+    /* -------------------------------------------------------------------------------------------------------------------------  */
+    
+             <div data-role="page" id="PagD" data-theme="b">
+           <div data-role="header">
+                    <a href="#Inicio" data-role="button" data-transition="slideup" data-add-back-btnRegresar
+                    data-add-back-btn="true" data-icon="home">Regresar</a>
+                   
+            </div>
+                    <p style="text-align: center"></p>
+                    <h1 style="text-align: center">CONSULTA DATOS</h1>
+    <div data-role="content"  style="text-align: center; font-size: 20px">
+             <form method="post" action="consultas.php">
+                    
+                  <input type="button" name="consultar" id="consultar" value="consultar">
+             </form>
+                 <div data-transition="flip" id="respu1">  
+                 </div>
+                  </div>
+            <div data-role="footer">
+                <p style="text-align: center; font-size: 10px;">Deerechos Reservados </p>
+             </div>
+            </div>
+    
+
+    
+        </body>
+    </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
